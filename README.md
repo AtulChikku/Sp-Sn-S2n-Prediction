@@ -1,72 +1,80 @@
-# Predicting Nuclear Separation Energies with Deep Neural Networks
+# Predicting Nuclear Separation Energies with Machine Learning
+
+> **Note:** This project is an extension and improvement upon the work presented in the Master's thesis "From Nucleus to Algorithms: Predicting Neutron separation energy with Deep Neural Network (DNN)" by Sourav Gayen (IIT ISM Dhanbad, 2025). The DNN model serves as a baseline for comparison against the improved XGBoost model developed here.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A deep learning project to predict nucleon separation energies ($S_n$, $S_{2n}$, and $S_p$) using a physics-informed feature set and a deep neural network architecture implemented in PyTorch.
+A machine learning project to predict nucleon separation energies ($S_n$, $S_{2n}$, and $S_p$) by implementing and comparing a Deep Neural Network (DNN) and an XGBoost model.
+
 
 ## 🎯 Motivation & Goal
 
-The prediction of nucleon separation energies is a fundamental challenge in nuclear physics. [cite_start]These values are crucial for understanding nuclear structure, stability, and the limits of the nuclear chart, particularly in the exotic, data-scarce regions near the neutron and proton drip lines[cite: 36]. [cite_start]Accurate predictions are vital not only for nuclear theory but also for astrophysical applications, such as modeling the r-process nucleosynthesis responsible for creating heavy elements[cite: 217, 519].
+The prediction of nucleon separation energies is a fundamental challenge in nuclear physics, crucial for understanding nuclear structure, stability, and the limits of the nuclear chart. Accurate predictions are vital not only for nuclear theory but also for astrophysical applications, such as modeling the r-process nucleosynthesis.
 
-While traditional theoretical models have been successful, they often struggle to extrapolate into these unexplored regions. This project aims to bridge that gap by developing a **data-driven, physics-informed deep learning model** capable of:
+While traditional theoretical models have been successful, they often struggle to extrapolate into exotic, data-scarce regions near the drip lines. This project tackles this challenge by developing and comparing two distinct, powerful machine learning approaches:
 
-1.  Accurately predicting neutron ($S_n$), two-neutron ($S_{2n}$), and proton ($S_p$) separation energies.
-2.  Generalizing its predictions to nuclei far from the valley of stability.
-3.  Providing physically interpretable results that align with established nuclear theory.
+1.  **Deep Neural Network (DNN)**: A baseline model designed to learn complex, non-linear relationships directly from the data.
+2.  **XGBoost**: A state-of-the-art gradient boosting model, used here to improve upon the baseline performance.
+
+The goal is to not only achieve high predictive accuracy but also to compare the performance and interpretability of these two different modeling paradigms on a complex physics problem.
 
 ## 💾 Dataset
 
-[cite_start]The model is trained on experimental data sourced from the **NuDat database**, maintained by the National Nuclear Data Center (NNDC)[cite: 29, 271].
+The model is trained on experimental data sourced from the **NuDat database**, maintained by the National Nuclear Data Center (NNDC).
 
-The input features were carefully selected and engineered to provide the model with physically meaningful information:
+The input features were carefully selected and engineered to provide the models with physically meaningful information:
 
-* [cite_start]**Fundamental Features**: Proton number (Z), Neutron number (N), Mass number (A). [cite: 300]
+* **Fundamental Features**: Proton number (Z), Neutron number (N), Mass number (A).
 * **Engineered Features**: To capture complex nuclear effects, the following were included:
-    * [cite_start]Isospin Asymmetry: $(N-Z)/A$ [cite: 304]
-    * [cite_start]Neutron-to-Proton Ratio: $n/p$ [cite: 94]
-    * [cite_start]Mass Scaling Term: $A^{2/3}$ [cite: 305]
-    * [cite_start]Pairing Effects: Binary flags for odd/even Z and N numbers. [cite: 306]
-    * [cite_start]Shell Structure: Valence nucleon counts ($V_z$, $V_n$) and categorical indicators for shell regions ($Z_{shell}$, $N_{shell}$). [cite: 307, 308]
+    * Isospin Asymmetry: $(N-Z)/A$
+    * Neutron-to-Proton Ratio: $n/p$
+    * Mass Scaling Term: $A^{2/3}$
+    * Pairing Effects: Binary flags for odd/even Z and N numbers.
+    * Shell Structure: Valence nucleon counts ($V_z$, $V_n$) and categorical indicators for shell regions ($Z_{shell}$, $N_{shell}$).
 
-[cite_start]All features were standardized using **Z-score normalization** before being fed into the network to ensure stable training[cite: 321].
+All features were standardized using **Z-score normalization** before being used in the DNN.
 
 ## 🛠️ Methodology
 
-The core of this project is a **Deep Neural Network (DNN)** built with Python and PyTorch.
+This project implements two distinct models for a comprehensive comparative analysis.
 
-* [cite_start]**Architecture**: The model consists of several dense (fully-connected) hidden layers using a mix of `ReLU` and `Tanh` activation functions. [cite: 623]
-* [cite_start]**Regularization**: To prevent overfitting and improve generalization, **L2 regularization** is applied to the weights of the hidden layers. [cite: 39, 451]
-* [cite_start]**Optimization**: The network is trained using the **Adam optimizer** to minimize the **Mean Squared Error (MSE)** between the predicted and true separation energies. [cite: 39, 441]
-* [cite_start]**Interpretability**: After training, **SHapley Additive exPlanations (SHAP)** analysis is used to understand the model's decisions and verify that its feature importances align with physical principles. [cite: 43, 497]
+### 1. Deep Neural Network (DNN) - The Baseline
 
-## 📊 Results
+The baseline model is a feedforward neural network built with **PyTorch**. Its architecture is directly inspired by the work presented in the Master's thesis "From Nucleus to Algorithms: Predicting Neutron separation energy with Deep Neural Network (DNN)" by Sourav Gayen (IIT ISM Dhanbad, 2025). It consists of multiple dense hidden layers with `ReLU` and `Tanh` activations and utilizes L2 regularization to prevent overfitting. This implementation serves as a benchmark to evaluate the XGBoost model.
 
-The model achieves high predictive accuracy across all three targets. For the neutron separation energy ($S_n$) prediction, the key results on the test set are:
-* [cite_start]**Mean Absolute Error (MAE)**: 0.210 MeV [cite: 734]
-* [cite_start]**Prediction Accuracy (>95%)**: Achieved for nuclei within a ±0.5 MeV tolerance. [cite: 490, 736]
+### 2. XGBoost - The Improvement
 
-Key findings include:
-* [cite_start]**Physical Consistency**: The model successfully learned and reproduced known physical phenomena without being explicitly programmed to do so, including the effects of **shell closures**, **pairing correlations**, and smooth trends across isotopic chains. [cite: 42]
-* [cite_start]**Feature Importance**: SHAP analysis confirms that the most influential features are **isospin asymmetry** ($(N-Z)/A$), **neutron-to-proton ratio**, and **shell-related indicators**—perfectly aligning with established nuclear theory. [cite: 44, 702]
+An implementation of **eXtreme Gradient Boosting**, a powerful and efficient tree-based ensemble method. XGBoost builds a strong predictive model by sequentially adding weak learner models (decision trees), with each new tree correcting the errors of the previous ones. It is highly effective for structured/tabular data and often provides superior performance.
 
-#### True vs. Predicted Values ($S_n$)
-![True vs Predicted Plot](results/figures/true_vs_predicted_Sn.png)
-*(This is a placeholder. You should replace this with a link to your actual plot in the repository.)*
+### Interpretability
 
-#### SHAP Feature Importance Summary
-![SHAP Summary Plot](results/figures/shap_summary_Sn.png)
-*(This is a placeholder. You should replace this with a link to your actual plot in the repository.)*
+For both models, **SHapley Additive exPlanations (SHAP)** analysis is used to understand feature importance and connect the models' predictions back to underlying nuclear physics principles.
+
+## 📊 Results & Model Comparison
+
+Both models achieved high predictive accuracy, demonstrating the viability of ML for this task. A comparison of their performance measure in terms of Mean Square Error (MSE) on test set is below:
+
+| Model |   $S_n$   |   $S_p$   |   $S_{2n}$   |
+| :---- | :-------- | :-------- | :-------- |
+| DNN   | 0.337 MeV | 0.385 MeV | 0.760 MeV |
+| XGBoost| 0.178 MeV | 0.217 MeV | 0.223 MeV |
+
+#### SHAP Feature Importance Summary (XGBoost)
+
+SHAP analysis for the XGBoost model confirms that physically significant features like **isospin asymmetry** and **shell indicators** are the primary drivers of its predictions, reinforcing the model's physical consistency.
+![SHAP Summary Plot](results/figures/shap_summary_xgb.png)
+*(Note: Replace with the actual path to your saved plot in the repository.)*
 
 ## 🚀 How to Use
 
 ### Prerequisites
-- Python 3.8+
-- PyTorch
-- NumPy
-- Pandas
-- Scikit-learn
-- Matplotlib
-- SHAP
+
+-   Python 3.8+
+-   PyTorch
+-   XGBoost
+-   NumPy, Pandas, Scikit-learn
+-   Matplotlib, Seaborn
+-   SHAP
 
 ### Installation
 
@@ -83,14 +91,14 @@ Key findings include:
 
 ### Running the Code
 
-1.  **Train a Model**:
-    Use the main training script to train a new model. You can specify the target observable.
+Use the main training script. You can specify which model to run via command-line arguments.
+
+1.  **Train the DNN Model**:
     ```bash
-    python src/train.py --target Sn --epochs 200 --batch_size 32
+    python src/train.py --model dnn --target Sn --epochs 200
     ```
 
-2.  **Make Predictions**:
-    Use a prediction script to get the separation energy for a given nucleus.
+2.  **Train the XGBoost Model**:
     ```bash
-    python src/predict.py --target Sn --Z 8 --N 8
+    python src/train.py --model xgboost --target Sn
     ```
