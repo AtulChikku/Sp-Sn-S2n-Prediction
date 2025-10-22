@@ -1,4 +1,4 @@
-# Predicting Nuclear Separation Energies with Machine Learning
+# Predicting Nucleon Separation Energies with Machine Learning
 
 > **Note:** This project is an extension and improvement upon the work presented in the Master's thesis "From Nucleus to Algorithms: Predicting Neutron separation energy with Deep Neural Network (DNN)" by Sourav Gayen (IIT ISM Dhanbad, 2025). The DNN model serves as a baseline for comparison against the improved XGBoost model developed here.
 
