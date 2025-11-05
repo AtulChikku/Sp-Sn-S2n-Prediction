@@ -80,8 +80,8 @@ SHAP analysis for the XGBoost model confirms that physically significant feature
 
 1.  Clone the repository:
     ```bash
-    git clone [https://github.com/](https://github.com/)<your-username>/<your-repo-name>.git
-    cd <your-repo-name>
+    git clone https://github.com/AtulChikku/Sp-Sn-S2n-Prediction.git
+    cd Sp-Sn-S2n-Prediction
     ```
 
 2.  Install the required packages:
